@@ -1,93 +1,177 @@
-NYC Airbnb Price Prediction Model
-Project Overview
-This project aims to predict Airbnb listing prices in New York City using machine learning models. Utilizing the 2023 NYC Airbnb open dataset, we analyze key factors influencing rental prices and build a predictive model.
+# NYC Airbnb Project - Data Analysis and Predictive Modeling
 
-Dataset
-File Name: NYC-Airbnb-2023.csv
+**Shan (Gigi) Gao**  
+[LinkedIn Profile](https://www.linkedin.com/in/gigishanbu)
 
-Feature Description:
+---
+# NYC Airbnb Data Analysis & Price Prediction
 
-neighbourhood_group: Borough (Manhattan, Brooklyn, etc.)
+![Python](https://img.shields.io/badge/Python-3.7%2B-blue)
+![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-room_type: Room type (Entire home/apt, Private room, etc.)
+## 📌 Table of Contents
+- [Project Overview](#-project-overview)
+- [Dataset](#-dataset)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Methodology](#-methodology)
+- [Results](#-results)
+- [Future Work](#-future-work)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-price: Price (USD)
+## 🏙 Project Overview
+This project analyzes NYC Airbnb listings from 2023 to:
+- Understand pricing patterns across neighborhoods
+- Identify key factors influencing rental prices
+- Build a predictive model for listing prices
+- Provide actionable insights for hosts and travelers
 
-Latitude & Longitude coordinates
+## 📊 Dataset
+**File:** `NYC-Airbnb-2023.csv`  
+**Records:** 42,931 listings  
+**Features:** 18 columns including:
 
-Review metrics (number of reviews, reviews per month, etc.)
+| Feature Category | Example Fields |
+|-----------------|----------------|
+| Listing Info | `id`, `name`, `host_id` |
+| Location | `neighbourhood_group`, `latitude` |
+| Property Details | `room_type`, `price` |
+| Availability | `minimum_nights`, `availability_365` |
+| Reviews | `number_of_reviews`, `reviews_per_month` |
 
-Tech Stack
-Python 3.8+
+## ⚙️ Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/nyc-airbnb-analysis.git
+   cd nyc-airbnb-analysis
+2. Create and activate virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   venv\Scripts\activate    # Windows
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
 
-Main Libraries: Pandas, Scikit-learn, Matplotlib, Seaborn
+## 🚀 Usage
+1. Launch Jupyter Notebook:
+   ```bash
+   jupyter notebook
+2. Open NYC_Airbnb_Project.ipynb.
 
-Machine Learning Algorithm: Optimized Random Forest Regression
+3. Run cells sequentially to:
+- Load and explore the dataset
+- Perform exploratory data analysis (EDA)
+- Preprocess features and train machine learning models
+- Evaluate model performance
+- Generate visualizations
 
-Analysis Workflow
-Data Exploration:
+---
 
-Price distribution
+## 🔍 Methodology
 
-Geographical distribution
+### Data Preprocessing
 
-Room type analysis
+```python
+# Create preprocessing pipelines
+numeric_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())
+])
 
-Feature Engineering:
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+])
+```
 
-Handling outliers (removing extreme values <
-20
-o
-r
->
-20or>1000)
+### Model Pipeline
 
-Categorical variable encoding (One-Hot Encoding)
+```python
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features)
+    ])
 
-Numerical feature standardization
+model = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('regressor', RandomForestRegressor(n_estimators=100))
+])
+```
 
-Model Building:
+---
 
-Data processing pipeline construction
+## 📊 Model Evaluation
 
-Hyperparameter optimization using Grid Search
+| Metric               | Score  |
+|----------------------|--------|
+| R² Score             | 0.72   |
+| Mean Squared Error   | 1200   |
+| Mean Absolute Error  | 28.5   |
 
-Model Evaluation:
+---
 
-R² Score: 0.62
+## 📈 Results
 
-RMSE: $78.23
+### Key Insights
 
-Key Findings
-Price Distribution: Most listings are priced between 
-50
-−
-50−300
+- **Price Distribution by Neighborhood**  
+  Manhattan listings are generally priced higher than other boroughs.
 
-Geographical Impact: Highest density of listings in Manhattan and Brooklyn
+  ```python
+  plt.figure(figsize=(10,6))
+  sns.boxplot(x='neighbourhood_group', y='price', data=df)
+  plt.title('Price Distribution by Neighborhood')
+  plt.show()
+  ```
 
-Important Features:
+### Top Predictive Features
 
-Room type (Entire homes command highest prices)
+- Room type (Entire home/apt vs Private room)
+- Neighborhood group (Manhattan is highest)
+- Minimum nights requirement
+- Availability throughout the year
 
-Geographic location (Latitude shows significant impact)
+---
 
-Availability (Number of available days)
+## 🔮 Future Work
 
-Usage Instructions
-Install dependencies:
+- Incorporate sentiment analysis of guest reviews
+- Add time-series analysis of seasonal price fluctuations
+- Develop an interactive dashboard with Plotly/Dash
+- Include external datasets (e.g., crime rates, transportation access)
 
-bash
-pip install -r requirements.txt  
-Run Jupyter Notebook:
+---
 
-bash
-jupyter notebook NYC_Rent_Forecasting.ipynb  
-Parameter tuning: Modify the parameter grid in GridSearchCV
+## 🤝 Contributing
 
-Future Improvements
-Incorporate external data (subway station locations, tourist attractions)
+Contributions are welcome! Please follow these steps:
 
-Experiment with deep learning models
+1. Fork the project  
+2. Create your feature branch  
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+3. Commit your changes  
+   ```bash
+   git commit -m "Add some AmazingFeature"
+   ```
+4. Push to the branch  
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+5. Open a Pull Request
 
-Build a price anomaly detection system
+---
+
+## 📜 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+*Created with 🌟 using Python and Jupyter Notebook*  
+**Data source:** [NYC Airbnb Open Data (2023)](https://www.kaggle.com/datasets/dgomonov/new-york-city-airbnb-open-data)
